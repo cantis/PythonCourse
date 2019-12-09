@@ -10,7 +10,7 @@ def load_images(card_images):
 
     # for each suit retrieve the image for the cards.
     for suit in suits:
-        for card in range(1,11):
+        for card in range(1, 11):
             name = 'cards\\{}_{}.{}'.format(str(card), suit, extension)
             image = tkinter.PhotoImage(file=name)
             card_images.append((card, image,))
@@ -32,7 +32,7 @@ def deal_card(frame):
 
 def score_hand(hand):
     # Calculate the total score of all cards in the list
-    # only one ace can have the value 11, this will reduce to 1 if the hand would bust. 
+    # only one ace can have the value 11, this will reduce to 1 if the hand would bust.
     score = 0
     ace = False
     for next_card in hand:
@@ -75,6 +75,11 @@ def deal_player():
     if player_score > 21:
         result_text.set("Dealer Wins")
 
+def inital_deal():
+    deal_player()
+    dealer_hand.append(deal_card(dealer_card_frame))
+    dealer_score_label.set(score_hand(dealer_hand))
+    deal_player()
 
 def new_game():
     global dealer_card_frame
@@ -97,16 +102,17 @@ def new_game():
     # Create the list to store the dealer's and player's hands
     dealer_hand.clear()
     player_hand.clear()
-
-    deal_player()
-    dealer_hand.append(deal_card(dealer_card_frame))
-    dealer_score_label.set(score_hand(dealer_hand))
-    deal_player()
+    inital_deal()
 
 
 def shuffle():
     random.shuffle(deck)
 
+
+def play():
+    inital_deal()
+    mainWindow.mainloop()
+    
 
 mainWindow = tkinter.Tk()
 
@@ -165,6 +171,5 @@ shuffle()
 dealer_hand = []
 player_hand = []
 
-new_game()
-
-mainWindow.mainloop()
+if __name__ == "__main__":
+    play()
