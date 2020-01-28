@@ -6,4 +6,9 @@ def factorial(n):
     else:
         return n * factorial(n-1)
 
-print(factorial(1000))
+try:
+    print(factorial(900))
+except (RecursionError, ZeroDivisionError):
+    print("This program cannot calculate factorials that large")
+
+print("Program Terminating")
