@@ -2,20 +2,18 @@
 import sqlite3
 
 DB = sqlite3.connect("RollingBack\\account.sqlite")
-DB.execute("CREATE TABLE IF NOT EXISTS accounts (name TEXT PRIMARY KEY NOT NULL, \
-    balance INTEGER NOT NULL)")
+DB.execute("CREATE TABLE IF NOT EXISTS accounts (name TEXT PRIMARY KEY NOT NULL, balance INTEGER NOT NULL)")
 DB.execute("CREATE TABLE IF NOT EXISTS transactions (time TIMESTAMP NOT NULL, \
     account TEXT NOT NULL, amount INTEGER NOT NULL, PRIMARY KEY (time, account))")
+
 
 class Account():
     """ Class to represent an Account """
 
     def __init__(self, name: str, opening_balance: int = 0):
         """ Initialize
-
         Arguments:
             name {str} -- Name of account holder
-
         Keyword Arguments:
             opening_balance {int} -- Opening Balance (default: {0.0})
         """
@@ -36,10 +34,8 @@ class Account():
 
     def deposit(self, amount: int) -> float:
         """ Deposit into account
-
         Arguments:
             amount {float} -- Amount to deposit
-
         Returns:
             float -- Current Balance
         """
@@ -50,17 +46,15 @@ class Account():
 
     def withdraw(self, amount: int) -> float:
         """ Withdraw from account
-
         Arguments:
             amount {float} -- Amount to withdraw
-
         Returns:
             float -- Current Balance
         """
         if 0 < amount <= self._balance:
             self._balance -= amount
             print(f"{amount/100:.2f} withdrawn")
-            return amount /100
+            return amount / 100
         else:
             print(
                 "The amount must be greater than zero and no more than your account balance")
@@ -68,9 +62,8 @@ class Account():
 
     def show_balance(self):
         """ Display Account Balance
-
         Returns:
-            string -- Current Balance
+            string -- Displaying Current Balance
         """
         print(f"Balance on account {self.name} is {self._balance/100:.2f}")
 
@@ -84,9 +77,10 @@ if __name__ == "__main__":
     JOHN.withdraw(0)
     JOHN.show_balance()
 
-    TERRY = Account("Terry")
+    TERRYJ = Account("TerryJ")
     GRAHAM = Account("Graham", 9000)
-    ERIC = Account("ERIC", 7000)
+    ERIC = Account("Eric", 7000)
+    MICHAEL = Account("Michael", 500)
+    TERRYG = Account("TerryG")
 
     DB.close()
-    
