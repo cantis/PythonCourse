@@ -1,9 +1,11 @@
 """ Account Class """
 import sqlite3
+import pytz
+import datetime
 
 DB = sqlite3.connect("RollingBack\\account.sqlite")
 DB.execute("CREATE TABLE IF NOT EXISTS accounts (name TEXT PRIMARY KEY NOT NULL, balance INTEGER NOT NULL)")
-DB.execute("CREATE TABLE IF NOT EXISTS transactions (time TIMESTAMP NOT NULL, \
+DB.execute("CREATE TABLE IF NOT EXISTS history (time TIMESTAMP NOT NULL, \
     account TEXT NOT NULL, amount INTEGER NOT NULL, PRIMARY KEY (time, account))")
 
 
@@ -40,7 +42,12 @@ class Account():
             float -- Current Balance
         """
         if amount > 0.0:
-            self._balance += amount
+            new_balance = self._balance + amount
+            deposit_time = pytz.utc.localize(datetime.datetime.utcnow())
+            DB.execute("UPDATE accounts SET balance = ? WHERE (name = ?)", (new_balance, self.name))
+            DB.execute("INSERT INTO history VALUES(?, ?, ?)", (deposit_time, self.name, amount))
+            DB.commit()
+            self._balance = new_balance
             print(f"{amount/100:.2f} deposited")
         return self._balance/100
 
